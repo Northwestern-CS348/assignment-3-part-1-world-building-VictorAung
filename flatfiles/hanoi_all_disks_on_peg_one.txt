@@ -17,4 +17,29 @@ Example:
 fact: (pred obj1 obj2)
 rule: ((pred obj1 obj2) (pred obj2 obj3)) -> (pred obj1 obj3)
 
+Objects: Disks, Pegs, Base
+Relationships: disks are on pegs, disks are larger than other disks, disks are on top of other disks, pegs can be empty,
+there is a disk at the top of any stack.
+Inferences: If you are larger than another disk and it is larger than a third, you are larger than it too.
+Constraints: A disk can be moved to a peg if it is on the top of a stack and either the peg is empty
+or the disk at the top of the stack on the peg is larger than it is.
+
 """
+rule: ((larger ?x ?y) (larger ?y ?z)) -> (larger ?x ?z)
+fact: (larger disk5 disk4)
+fact: (larger disk4 disk3)
+fact: (larger disk3 disk2)
+fact: (larger disk2 disk1)
+
+rule: ((on ?x ?y) (on ?y ?z)) -> (on ?x ?z)
+fact: (on disk1 disk2)
+fact: (on disk2 disk3)
+fact: (on disk3 disk4)
+fact: (on disk4 disk5)
+fact: (on disk5 peg1)
+
+fact: (empty peg2)
+fact: (empty peg3)
+fact: (top disk1 peg1)
+rule: ((top ?a ?x) (empty ?y)) -> (movable ?a ?x ?y)
+rule: ((top ?a ?x) (top ?b ?y) (larger ?b ?a)) -> (movable ?a ?x ?y)
